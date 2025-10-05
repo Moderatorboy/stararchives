@@ -1,14 +1,22 @@
 {
   "videos": [
     {
+      "title": "Lecture Name ➜ Structural Isomerism L-02 Calculation Of Structural Isomers",
+      "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L02_Calculation.mp4"
+    },
+    {
       "title": "Structural_Isomerism_L01_Introduction_By_SKM_Sir",
-      "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L01_Introduction_By_SKM_Sir.mp4"
+      "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L01_Intro.mp4"
     }
   ],
   "pdfs": [
     {
+      "title": "Lecture Name ➜ Structural Isomerism L-02 Calculation Of Structural Isomers",
+      "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L02_Calculation.pdf"
+    },
+    {
       "title": "Structural_Isomerism_L01_Introduction_By_SKM_Sir",
-      "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L01_Introduction_By_SKM_Sir.pdf"
+      "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L01_Intro.pdf"
     }
   ]
 }
