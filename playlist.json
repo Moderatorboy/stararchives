@@ -1,17 +1,14 @@
 {
-  "Class 11": {
-    "Physics NS Sir": {
-      "Chapter 1: Motion": [
-        {"title":"Lecture 1 - Kinematics", "url":"https://archive.org/details/yourid-12345","pdf":"https://archive.org/download/yourpdf1.pdf"},
-        {"title":"Lecture 2 - Laws of Motion", "url":"https://archive.org/details/yourid-12346","pdf":"https://archive.org/download/yourpdf2.pdf"}
-      ]
-    }
-  },
-  "Manual Uploads": {
-    "Manual": {
-      "Manual": [
-        {"title":"Mechanics Lecture 1", "url":"downloads/Manual_Mechanics_Lecture1.mp4", "pdf":"manual_media/Mechanics_Lecture1.pdf"}
-      ]
-    }
-  }
+    "videos": [
+        {
+            "title": "Structural_Isomerism_L01_Introduction_By_SKM_Sir",
+            "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L01_Introduction_By_SKM_Sir.mp4"
+        }
+    ],
+    "pdfs": [
+        {
+            "title": "Structural_Isomerism_L01_Introduction_By_SKM_Sir",
+            "link": "https://archive.org/download/Basic_Organic_Chemistry/Structural_Isomerism_L01_Introduction_By_SKM_Sir.pdf"
+        }
+    ]
 }
