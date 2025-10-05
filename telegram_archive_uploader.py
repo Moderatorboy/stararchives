@@ -42,7 +42,7 @@ def send_telegram_message(message):
 
 def upload_to_archive(file_path, title):
     if not UPLOAD_TO_IA:
-        return None
+        return f"{VIDEO_FOLDER}/{os.path.basename(file_path)}" if file_path.endswith(('.mp4','.mkv','.webm')) else f"{PDF_FOLDER}/{os.path.basename(file_path)}"
     if not IA_ACCESS or not IA_SECRET or not IA_COLLECTION:
         print("[IA] Archive.org keys missing")
         return None
@@ -85,7 +85,7 @@ def main():
     for vf in video_files:
         file_path = os.path.join(VIDEO_FOLDER, vf)
         title = os.path.splitext(vf)[0]
-        link = upload_to_archive(file_path, title) if UPLOAD_TO_IA else f"{VIDEO_FOLDER}/{vf}"
+        link = upload_to_archive(file_path, title)
         playlist['videos'].append({'title': title, 'link': link})
 
     # Detect PDFs
@@ -95,7 +95,7 @@ def main():
     for pf in pdf_files:
         file_path = os.path.join(PDF_FOLDER, pf)
         title = os.path.splitext(pf)[0]
-        link = upload_to_archive(file_path, title) if UPLOAD_TO_IA else f"{PDF_FOLDER}/{pf}"
+        link = upload_to_archive(file_path, title)
         playlist['pdfs'].append({'title': title, 'link': link})
 
     # Save playlist.json
@@ -103,7 +103,7 @@ def main():
         json.dump(playlist, f, ensure_ascii=False, indent=4)
     print(f"[Main] playlist.json updated with {len(video_files)} videos and {len(pdf_files)} PDFs.")
 
-    # Optional Telegram Notification
+    # Telegram Notification
     send_telegram_message(f"Playlist updated: {len(video_files)} videos, {len(pdf_files)} PDFs")
 
 if __name__ == "__main__":
