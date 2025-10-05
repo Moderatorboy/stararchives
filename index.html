@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>B2GPT Lecture Archive</title>
+<link href="style.css" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <h1 class="fancy-heading">STARPANDA</h1>
+    <input id="searchBox" placeholder="Search lecture / chapter / teacher..." />
+  </header>
+
+  <main id="lecture-container"></main>
+
+  <!-- modal for archive.org/embed player -->
+  <div id="playerModal" class="modal" onclick="closePlayer(event)">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+      <button class="close" onclick="closePlayer()">✕</button>
+      <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
+      <div class="modal-actions">
+        <a id="pdfOpen" class="pdf-btn" target="_blank" rel="noopener">Open PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- random quotes + must drop msg -->
+  <section class="bottom-area">
+    <div id="quoteBox" class="quote"></div>
+
+    <div class="must-drop">
+      <h2>💬 Must Drop Msg</h2>
+      <p class="hint">Enter channel name to join after request.</p>
+      <textarea id="answer" placeholder="Type your message..."></textarea>
+      <button id="submitBtn">Submit</button>
+      <p id="submitMessage"></p>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+telethon
+internetarchive
+requests
+beautifulsoup4
+python-dateutil

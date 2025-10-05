@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Uploads
+uploads/videos/
+uploads/pdfs/
+
+# Optional
+*.log
