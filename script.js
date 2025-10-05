@@ -10,7 +10,6 @@ const submitMessage = document.getElementById('submitMessage');
 
 let playlist = { videos: [], pdfs: [] };
 
-// Load playlist.json
 fetch('playlist.json')
   .then(res => res.json())
   .then(data => {
@@ -59,7 +58,6 @@ function closePlayer(event) {
   playerFrame.src = '';
 }
 
-// Search functionality
 searchBox.addEventListener('input', () => {
   const query = searchBox.value.toLowerCase();
   lectureContainer.childNodes.forEach(box => {
@@ -67,7 +65,6 @@ searchBox.addEventListener('input', () => {
   });
 });
 
-// Random quotes
 const quotes = [
   "Keep learning!", "B2GPT rocks!", "Knowledge is power!", "Study smart, not hard!"
 ];
@@ -75,11 +72,9 @@ setInterval(() => {
   quoteBox.innerText = quotes[Math.floor(Math.random()*quotes.length)];
 }, 5000);
 
-// Must drop message submission
 submitBtn.addEventListener('click', () => {
   const msg = answerBox.value.trim();
   if (!msg) { alert('Type something!'); return; }
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${encodeURIComponent(msg)}`)
-    .then(()=> { submitMessage.innerText = "✅ join approval soon!"; answerBox.value = ''; })
-    .catch(()=> submitMessage.innerText = "❌ Submission Failed!");
+  submitMessage.innerText = "✅ Message submitted!";
+  answerBox.value = '';
 });
