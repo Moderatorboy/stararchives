@@ -24,6 +24,8 @@ IA_CREATOR = os.getenv("IA_CREATOR", "B2GPT")
 VIDEO_FOLDER = "uploads/videos"
 PDF_FOLDER = "uploads/pdfs"
 PLAYLIST_FILE = "playlist.json"
+LOG_FOLDER = "logs"
+os.makedirs(LOG_FOLDER, exist_ok=True)
 
 # ----------------------------
 # Helper Functions
@@ -49,18 +51,32 @@ def upload_to_archive(file_path, title):
 
     print(f"[IA] Uploading {title}...")
     filename = os.path.basename(file_path)
-    url = f"https://s3.us.archive.org/{IA_COLLECTION}/{filename}"
-    files = {'file': open(file_path, 'rb')}
+    identifier = IA_COLLECTION
+    url = f"https://s3.us.archive.org/{identifier}/{filename}"
+
+    headers = {
+        "x-archive-auto-make-bucket": "1",
+        "x-archive-meta-title": title,
+        "x-archive-meta-creator": IA_CREATOR,
+        "x-archive-meta-collection": IA_COLLECTION,
+        "x-archive-meta-mediatype": "movies" if file_path.endswith(('.mp4','.mkv','.webm')) else "texts"
+    }
+
     try:
-        r = requests.put(url, files=files, auth=(IA_ACCESS, IA_SECRET))
+        with open(file_path, "rb") as f:
+            r = requests.put(url, data=f, auth=(IA_ACCESS, IA_SECRET), headers=headers)
         if r.status_code in (200, 201):
             print(f"[IA] Uploaded successfully: {title}")
-            return f"https://archive.org/download/{IA_COLLECTION}/{filename}"
+            return f"https://archive.org/download/{identifier}/{filename}"
         else:
             print(f"[IA] Upload failed ({r.status_code}): {r.text}")
+            with open(f"{LOG_FOLDER}/error_log.txt", "a") as log:
+                log.write(f"{title} failed: {r.status_code} → {r.text}\n")
             return None
     except Exception as e:
         print(f"[IA] Exception during upload: {e}")
+        with open(f"{LOG_FOLDER}/error_log.txt", "a") as log:
+            log.write(f"{title} exception: {e}\n")
         return None
 
 def detect_files(folder, extensions):
