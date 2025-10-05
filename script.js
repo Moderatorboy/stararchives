@@ -26,16 +26,32 @@ function renderLectures(data) {
     const div = document.createElement('div');
     div.className = 'lecture-box';
     div.innerHTML = `<strong>${video.title.replace(/_/g,' ')}</strong>`;
-    div.onclick = () => openPlayer(video.link, pdf?.link);
+    div.onclick = () => {
+      if (!video.link && !pdf?.link) {
+        alert("No video or PDF available yet.");
+        return;
+      }
+      openPlayer(video.link, pdf?.link);
+    };
     lectureContainer.appendChild(div);
   });
 }
 
 function openPlayer(videoLink, pdfLink) {
-  if (!videoLink) { alert('Video link not available'); return; }
-  playerFrame.src = videoLink;
+  if (videoLink) {
+    playerFrame.src = videoLink.includes("archive.org") ? 
+      `https://archive.org/embed/${extractIdentifier(videoLink)}` : videoLink;
+  } else {
+    playerFrame.src = '';
+  }
   pdfOpen.href = pdfLink || '#';
+  pdfOpen.style.display = pdfLink ? 'inline-block' : 'none';
   playerModal.style.display = 'flex';
+}
+
+function extractIdentifier(link) {
+  const parts = link.split("/download/");
+  return parts[1]?.split("/")[0] || "";
 }
 
 function closePlayer(event) {
