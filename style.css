@@ -1,33 +1,85 @@
 body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: url('https://images.unsplash.com/photo-1612832020533-8cbd15d28f7d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
-    background-size: cover;
-    color: #fff;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: url('https://images.unsplash.com/photo-1612832020533-8cbd15d28f7d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
 }
 
 .fancy-heading {
-    text-align: center;
-    font-size: 4em;
-    font-weight: 900;
-    background: linear-gradient(90deg, #f1c40f, #e74c3c, #9b59b6, #3498db);
-    background-size: 400% 400%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientMove 5s ease infinite;
-    text-shadow: 2px 2px 15px rgba(0,0,0,0.7);
-    margin: 40px 0;
-    letter-spacing: 3px;
+  text-align: center;
+  font-size: 4em;
+  font-weight: 900;
+  background: linear-gradient(90deg, #f1c40f, #e74c3c, #9b59b6, #3498db);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 5s ease infinite;
+  text-shadow: 2px 2px 15px rgba(0,0,0,0.7);
+  margin: 40px 0;
+  letter-spacing: 3px;
 }
 
-/* Modal */
-.modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000; }
-.modal-inner { position: relative; background: #111; padding: 20px; border-radius: 12px; max-width: 800px; width: 90%; }
-.modal iframe { width: 100%; height: 450px; }
-.modal .close { position: absolute; top:10px; right:10px; background:#f00; color:#fff; border:none; padding:5px 10px; cursor:pointer; border-radius:5px; }
-.pdf-btn { display:inline-block; padding:6px 12px; background:#3498db; color:#fff; border-radius:6px; margin-top:10px; text-decoration:none; }
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
 
-/* Lecture boxes */
-.lecture-box { background: rgba(0,0,0,0.6); margin:10px; padding:15px; border-radius:12px; cursor:pointer; transition:0.3s; box-shadow:0 4px 10px rgba(0,0,0,0.5); }
-.lecture-box:hover { background: rgba(0,0,0,0.8); transform: scale(1.02); }
+.modal {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.modal-inner {
+  position: relative;
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 90%;
+}
+.modal iframe {
+  width: 100%;
+  height: 450px;
+}
+.modal .close {
+  position: absolute;
+  top:10px;
+  right:10px;
+  background:#f00;
+  color:#fff;
+  border:none;
+  padding:5px 10px;
+  cursor:pointer;
+  border-radius:5px;
+}
+.pdf-btn {
+  display:inline-block;
+  padding:6px 12px;
+  background:#3498db;
+  color:#fff;
+  border-radius:6px;
+  margin-top:10px;
+  text-decoration:none;
+}
+
+.lecture-box {
+  background: rgba(0,0,0,0.6);
+  margin:10px;
+  padding:15px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 4px 10px rgba(0,0,0,0.5);
+}
+.lecture-box:hover {
+  background: rgba(0,0,0,0.8);
+  transform: scale(1.02);
+}
