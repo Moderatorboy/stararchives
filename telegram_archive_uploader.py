@@ -1,46 +1,110 @@
-from dotenv import load_dotenv
 import os
-from telethon import TelegramClient
-import requests
 import json
-from tqdm import tqdm
+import requests
+from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-TG_API_ID = int(os.getenv("TG_API_ID"))
+# ----------------------------
+# Environment Variables
+# ----------------------------
+TG_API_ID = int(os.getenv("TG_API_ID", 0))
 TG_API_HASH = os.getenv("TG_API_HASH")
 BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
 TG_CHAT_ID = os.getenv("TG_CHAT_ID")
-
+UPLOAD_TO_IA = os.getenv("UPLOAD_TO_IA", "False").lower() == "true"
 IA_ACCESS = os.getenv("IA_ACCESS")
 IA_SECRET = os.getenv("IA_SECRET")
 IA_COLLECTION = os.getenv("IA_COLLECTION")
-IA_CREATOR = os.getenv("IA_CREATOR")
-UPLOAD_TO_IA = os.getenv("UPLOAD_TO_IA") == "True"
+IA_CREATOR = os.getenv("IA_CREATOR", "B2GPT")
 
-# Initialize Telegram client
-client = TelegramClient('session_name', TG_API_ID, TG_API_HASH)
-
+# ----------------------------
 # Folders
+# ----------------------------
 VIDEO_FOLDER = "uploads/videos"
 PDF_FOLDER = "uploads/pdfs"
+PLAYLIST_FILE = "playlist.json"
 
-# Load existing playlist.json or create new
-if os.path.exists("playlist.json"):
-    with open("playlist.json", "r") as f:
-        playlist = json.load(f)
-else:
+# ----------------------------
+# Helper Functions
+# ----------------------------
+def send_telegram_message(message):
+    if not BOT_TOKEN or not TG_CHAT_ID:
+        print("Telegram bot not configured.")
+        return
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    params = {"chat_id": TG_CHAT_ID, "text": message}
+    try:
+        requests.get(url, params=params)
+        print(f"[Telegram] Message sent: {message}")
+    except Exception as e:
+        print(f"[Telegram] Failed to send message: {e}")
+
+def upload_to_archive(file_path, title):
+    if not UPLOAD_TO_IA:
+        return None
+    if not IA_ACCESS or not IA_SECRET or not IA_COLLECTION:
+        print("[IA] Archive.org keys missing")
+        return None
+
+    print(f"[IA] Uploading {title}...")
+    filename = os.path.basename(file_path)
+    url = f"https://s3.us.archive.org/{IA_COLLECTION}/{filename}"
+    files = {'file': open(file_path, 'rb')}
+    try:
+        r = requests.put(url, files=files, auth=(IA_ACCESS, IA_SECRET))
+        if r.status_code in (200, 201):
+            print(f"[IA] Uploaded successfully: {title}")
+            return f"https://archive.org/download/{IA_COLLECTION}/{filename}"
+        else:
+            print(f"[IA] Upload failed ({r.status_code}): {r.text}")
+            return None
+    except Exception as e:
+        print(f"[IA] Exception during upload: {e}")
+        return None
+
+def detect_files(folder, extensions):
+    print(f"[Detect] Checking folder: {folder}")
+    files = []
+    for f in os.listdir(folder):
+        if any(f.lower().endswith(ext) for ext in extensions):
+            files.append(f)
+            print(f"[Detect] Found: {f}")
+    return files
+
+# ----------------------------
+# Main
+# ----------------------------
+def main():
     playlist = {}
 
-# Functions:
-# - Download videos & PDFs from Telegram
-# - Detect manual files in uploads/
-# - Upload to Archive.org (if UPLOAD_TO_IA=True)
-# - Update playlist.json automatically
+    # Detect Videos
+    video_files = detect_files(VIDEO_FOLDER, ['.mp4', '.mkv', '.webm'])
+    playlist['videos'] = []
 
-# Example usage:
-# client.start()
-# download_from_telegram()
-# upload_to_archive()
-# update_playlist_json()
+    for vf in video_files:
+        file_path = os.path.join(VIDEO_FOLDER, vf)
+        title = os.path.splitext(vf)[0]
+        link = upload_to_archive(file_path, title) if UPLOAD_TO_IA else f"{VIDEO_FOLDER}/{vf}"
+        playlist['videos'].append({'title': title, 'link': link})
+
+    # Detect PDFs
+    pdf_files = detect_files(PDF_FOLDER, ['.pdf'])
+    playlist['pdfs'] = []
+
+    for pf in pdf_files:
+        file_path = os.path.join(PDF_FOLDER, pf)
+        title = os.path.splitext(pf)[0]
+        link = upload_to_archive(file_path, title) if UPLOAD_TO_IA else f"{PDF_FOLDER}/{pf}"
+        playlist['pdfs'].append({'title': title, 'link': link})
+
+    # Save playlist.json
+    with open(PLAYLIST_FILE, 'w', encoding='utf-8') as f:
+        json.dump(playlist, f, ensure_ascii=False, indent=4)
+    print(f"[Main] playlist.json updated with {len(video_files)} videos and {len(pdf_files)} PDFs.")
+
+    # Optional Telegram Notification
+    send_telegram_message(f"Playlist updated: {len(video_files)} videos, {len(pdf_files)} PDFs")
+
+if __name__ == "__main__":
+    main()
